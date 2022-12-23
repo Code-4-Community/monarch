@@ -5,11 +5,11 @@ import corpImage from './assets/Badge_Corp.png'
 import longTimePartnerImage from './assets/Badge_Heart.png'
 import frequentPartner from './assets/Badge_Partner.png'
 import raw from './raw.json'
-import axios from 'axios'
+import { apiClient as serverApiClient } from "common"
+
+
 
 faker.seed(123)
-
-console.log(raw)
 
 const loaded: Therapist[] = raw.map((rawTherapist: any) => {
   const [lat, long] = faker.address.nearbyGPSCoordinate([42, -71], 100)
@@ -182,8 +182,7 @@ async function fetchAllPractitioners(useFake=false): Promise<Therapist[]> {
   if (useFake) {
     return FAKE_THERAPISTS
   } else {
-    const response = await axios.get('https://monarch-backend.c4cneu.com/practitioners')
-    const data =  response.data
+    const data = await serverApiClient.getPractitioners();
     // Transform on the frontend, but really ought to be done on the backend :/
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
